@@ -7,26 +7,24 @@ public class BagMovement : MonoBehaviour
     public float speed = 1f;
     private Vector3 startPos;
     private Vector3 endPos;
+    public ItemPlacement itemPlacement; 
 
     private void Start()
     {
         startPos = transform.position;
-        endPos = new Vector3(10, transform.position.y, transform.position.z); 
+        endPos = new Vector3((float)-0.6, transform.position.y, transform.position.z);
+        StartCoroutine(MoveToEnd()); 
     }
 
-    private void Update()
+    public IEnumerator MoveToEnd()
     {
-        transform.position = Vector3.MoveTowards(transform.position, endPos, speed * Time.deltaTime);
-
-        if (transform.position == endPos)
+        while (Vector3.Distance(transform.position, endPos) > 0.001f)
         {
-            transform.position = startPos;
+            transform.position = Vector3.MoveTowards(transform.position, endPos, speed * Time.deltaTime);
+            yield return null;
         }
-    }
-
-    public void MoveToEnd()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, endPos, speed * Time.deltaTime);
+        
+        itemPlacement.PlaceItems();
     }
 
     public void ResetToStart()
@@ -34,4 +32,3 @@ public class BagMovement : MonoBehaviour
         transform.position = startPos;
     }
 }
-    

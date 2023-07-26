@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class ItemPlacement : MonoBehaviour
 {
-    public List<GameObject> itemPrefabs; 
-    public GameObject bag; 
-    public Transform[] spawnPositions; 
-
-    private void Start()
-    {
-        PlaceItems();
-    }
+    public List<GameObject> itemPrefabs;
+    public GameObject bag;
+    public Transform[] spawnPositions;
 
     public void PlaceItems()
     {
@@ -21,7 +16,8 @@ public class ItemPlacement : MonoBehaviour
         {
             int randomIndex = Random.Range(0, itemPrefabs.Count);
             GameObject selectedItemPrefab = itemPrefabs[randomIndex];
-            GameObject item = Instantiate(selectedItemPrefab, spawnPosition.position, Quaternion.identity);
+            Vector3 newPosition = new Vector3(spawnPosition.position.x, spawnPosition.position.y, -1); 
+            GameObject item = Instantiate(selectedItemPrefab, newPosition, Quaternion.identity);
             item.transform.SetParent(bag.transform);
         }
     }
@@ -42,8 +38,10 @@ public class ItemPlacement : MonoBehaviour
     {
         foreach (Transform child in bag.transform)
         {
-            Destroy(child.gameObject);
+            if (child.CompareTag("Illegal") || child.CompareTag("Legal"))
+            {
+                Destroy(child.gameObject);
+            }
         }
     }
-
 }

@@ -7,45 +7,38 @@ public class ButtonActions : MonoBehaviour
 {
     public BagMovement bagMovement;
     public ItemPlacement itemPlacement;
-    public int points = 0; 
+    public int points = 0;
 
     public void OnGreenButtonClicked()
     {
-        if (itemPlacement.HasIllegalItems()) 
+        if (itemPlacement.HasIllegalItems())
         {
-           
-            points -= 10; 
-            ResetBag();
-            itemPlacement.PlaceItems();
+            points -= 10;
         }
         else
         {
             points += 10;
-            ResetBag();
-            itemPlacement.PlaceItems();
         }
+        ResetBag();
     }
 
     public void OnRedButtonClicked()
     {
-        if (itemPlacement.HasIllegalItems()) 
+        if (itemPlacement.HasIllegalItems())
         {
             points += 10;
-            ResetBag();
-            itemPlacement.PlaceItems();
         }
         else
         {
-            
-            points -= 10; 
-            ResetBag();
-            itemPlacement.PlaceItems();
+            points -= 10;
         }
+        ResetBag();
     }
 
     private void ResetBag()
     {
-        bagMovement.ResetToStart(); 
-        itemPlacement.ClearItems(); 
+        bagMovement.ResetToStart();
+        itemPlacement.ClearItems();
+        StartCoroutine(bagMovement.MoveToEnd());
     }
 }
