@@ -14,12 +14,13 @@ public class ButtonActions : MonoBehaviour
         if (itemPlacement.HasIllegalItems())
         {
             points -= 10;
+            ResetBag();
         }
         else
         {
             points += 10;
+            StartCoroutine(bagMovement.MoveToLast());
         }
-        ResetBag();
     }
 
     public void OnRedButtonClicked()
@@ -32,7 +33,7 @@ public class ButtonActions : MonoBehaviour
         {
             points -= 10;
         }
-        ResetBag();
+            ResetBag();
     }
 
     private void ResetBag()
