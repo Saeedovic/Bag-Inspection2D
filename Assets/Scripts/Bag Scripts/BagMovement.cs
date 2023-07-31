@@ -5,6 +5,7 @@ using UnityEngine;
 public class BagMovement : MonoBehaviour
 {
     public float speed = 1f;
+    public Transform startPosObj;
     public Transform stopPosObj; 
     public Transform endPosObj; 
     private Vector3 startPos;
@@ -15,7 +16,7 @@ public class BagMovement : MonoBehaviour
 
     private void Start()
     {
-        startPos = transform.position;
+        startPos = startPosObj.position;
         stopPos = stopPosObj.position; 
         endPos = endPosObj.position; 
         StartCoroutine(MoveToEnd());
