@@ -8,10 +8,28 @@ public class NetworkManager : MonoBehaviour
 {
     Socket socket;
     public static NetworkManager instance;
+    public GameObject bagPrefab;
     public PlayerData playerData;
+    public ButtonActions buttonActions;
+    public delegate void RecievedBagMovementPacketEvent(string GameObjctID, Vector3 Pos);
+    public RecievedBagMovementPacketEvent OnRecievedBagMovementPacket;
 
     void Awake()
     {
+        buttonActions = FindObjectOfType<ButtonActions>();
+
+        Server server = FindObjectOfType<Server>();
+        if (server != null)
+        {
+            server.OnClientConnected += () =>
+            {
+                if (server.clients.Count == 2)
+                {
+                    SpawnBag();
+                }
+            };
+        }
+
         if (instance == null)
         {
             instance = this;
@@ -21,6 +39,7 @@ public class NetworkManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        print(" Network manager running");
     }
 
     void Start()
@@ -41,6 +60,14 @@ public class NetworkManager : MonoBehaviour
         socket.Connect(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3000));
     }
 
+    public void SpawnBag()
+    {
+       
+        GameObject bagObject = Instantiate(bagPrefab);
+        BagMovement bagMovement = bagObject.GetComponent<BagMovement>();
+        StartCoroutine(bagMovement.MoveToEnd());
+        bagMovement.SendBagMovementPacket();
+    }
     void Update()
     {
         if (socket.Available > 0)
@@ -49,28 +76,42 @@ public class NetworkManager : MonoBehaviour
             socket.Receive(buffer);
             BasePacket bp = new BasePacket().Deserialize(buffer);
 
+            print("Recieved packet" + bp.packType);
             if (bp.packType == BasePacket.PackType.ItemPlacement)
             {
                 ItemPacket ip = new ItemPacket().Deserialize(buffer);
 
                 Debug.Log(ip.items.Count);
-            /*    ItemPlacement itemPlacement = GetComponent<ItemPlacement>();
-                if (itemPlacement != null)
-                {
-                    foreach (var item in ip.items)
+                /*    ItemPlacement itemPlacement = GetComponent<ItemPlacement>();
+                    if (itemPlacement != null)
                     {
-                        itemPlacement.PlaceItem(item.position, item.rotation);
-                    }
-                }*/
+                        foreach (var item in ip.items)
+                        {
+                            itemPlacement.PlaceItem(item.position, item.rotation);
+                        }
+                    }*/
             }
+            else if (bp.packType == BasePacket.PackType.BagMovement)
+            {
+                BagMovementPacket bmp = new BagMovementPacket().Deserialize(buffer);
+
+                foreach (NetworkComponent nc in FindObjectsOfType<NetworkComponent>())
+                {
+                    if (nc.GameObjectID == bmp.GameObjectID)
+                    {
+                        nc.transform.position = bmp.Pos;
+                        break;
+                    }
+                }
+            }
+
         }
-        
     }
 
-    public void SendPacket(ItemPacket itemPacket)
-    {
-        byte[] buffer = itemPacket.Serialize();
-        socket.Send(buffer);
+        public void Send(byte[] buffer)
+        {
+            socket.Send(buffer);
+        }
+
     }
-}
 

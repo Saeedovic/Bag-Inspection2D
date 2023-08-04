@@ -2,48 +2,48 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class BagMovementPacket : BasePacket
 {
-    public BagData bag { get; private set; }
+    public Vector3 Pos { get; private set; }
 
-    public BagMovementPacket()
-    : base()
+    public BagMovementPacket() :
+        base()
     {
-        bag = new BagData(new Vector3(), new Vector3(), 0f);
+        Pos = Vector3.zero;
+        
     }
 
-    public BagMovementPacket(PlayerData player, string GameObjectID, BagData bag)
-        : base(player, GameObjectID, PackType.BagMovement)
+    public BagMovementPacket(
+        PlayerData player,
+        string GameObjectID,
+        Vector3 Pos
+        ) : base(player, GameObjectID, PackType.BagMovement)
     {
-        this.bag = bag;
+        this.Pos = Pos;
+       
     }
 
     public byte[] Serialize()
     {
+
         BeginSerialize();
 
-        bw.Write(bag.startPos.x);
-        bw.Write(bag.startPos.y);
-        bw.Write(bag.startPos.z);
-        bw.Write(bag.endPos.x);
-        bw.Write(bag.endPos.y);
-        bw.Write(bag.endPos.z);
-        bw.Write(bag.speed);
+        bw.Write(Pos.x);
+        bw.Write(Pos.y);
+        bw.Write(Pos.z);
+
+       
 
         return EndSerialize();
     }
 
     public new BagMovementPacket Deserialize(byte[] buffer)
     {
-        BeginDeserialize(buffer);
+        base.Deserialize(buffer);
 
-        Vector3 startPos = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
-        Vector3 endPos = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
-        float speed = br.ReadSingle();
-
-        bag = new BagData(startPos, endPos, speed);
-
-        EndDeserialize();
+        Pos = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+       
 
         return this;
     }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,7 +9,7 @@ public class ButtonActions : MonoBehaviour
     public BagMovement bagMovement;
     public ItemPlacement itemPlacement;
     public int points = 0;
-
+    public bool local;
     public void OnGreenButtonClicked()
     {
         if (itemPlacement.HasIllegalItems())
@@ -21,7 +22,8 @@ public class ButtonActions : MonoBehaviour
             points += 10;
             StartCoroutine(bagMovement.MoveToLast());
         }
-    }
+
+ }
 
     public void OnRedButtonClicked()
     {
@@ -34,6 +36,7 @@ public class ButtonActions : MonoBehaviour
             points -= 10;
         }
             ResetBag();
+        
     }
 
     private void ResetBag()

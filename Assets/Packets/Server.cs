@@ -7,7 +7,8 @@ using System.Collections.Generic;
 public class Server : MonoBehaviour
 {
     Socket serverSocket;
-    List<Socket> clients;
+    public List<Socket> clients;
+    public event Action OnClientConnected;
 
     void Start()
     {
@@ -29,8 +30,15 @@ public class Server : MonoBehaviour
         try
         {
             clients.Add(serverSocket.Accept());
-            
+            OnClientConnected?.Invoke();
+
             Debug.LogError("Client Connected");
+
+            if (clients.Count > 2)
+            {
+                Debug.LogError("Client Connected");
+
+            }
         }
         catch
         {
@@ -46,12 +54,16 @@ public class Server : MonoBehaviour
                     byte[] buffer = new byte[clients[i].Available];
                     clients[i].Receive(buffer);
 
+                    print("Recieved packet");
+
                     for (int j = 0; j < clients.Count; j++)
                     {
                         if (i == j)
                             continue;
 
                         clients[j].Send(buffer);
+                        print("Sent packet");
+
                     }
                 }
             }

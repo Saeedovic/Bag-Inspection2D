@@ -30,7 +30,7 @@ public class ItemPacket : BasePacket
             bw.Write(item.position.x);
             bw.Write(item.position.y);
             bw.Write(item.position.z);
-       
+
         }
 
         return EndSerialize();
@@ -38,7 +38,7 @@ public class ItemPacket : BasePacket
 
     public new ItemPacket Deserialize(byte[] buffer)
     {
-        BeginDeserialize(buffer);
+        base.Deserialize(buffer);
 
         int itemCount = br.ReadInt32();
         items = new List<ItemData>();
@@ -51,9 +51,6 @@ public class ItemPacket : BasePacket
             ItemData item = new ItemData(itemName, position);
             items.Add(item);
         }
-
-        EndDeserialize();
-
         return this;
     }
 }

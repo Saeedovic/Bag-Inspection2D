@@ -19,10 +19,7 @@ public class BasePacket
         None,
         ItemPlacement,
         BagMovement,
-
-
-
-       
+        ButtonActionPacket,
     }
 
     public PackType packType { get; private set; }
@@ -60,22 +57,16 @@ public class BasePacket
 
     public BasePacket Deserialize(byte[] buffer)
     {
-        BeginDeserialize(buffer);
-        EndDeserialize();
-        return this;
-    }
-
-    protected void BeginDeserialize(byte[] buffer)
-    {
         readStream = new MemoryStream(buffer);
         br = new BinaryReader(readStream);
 
         player = new PlayerData(br.ReadString(), br.ReadString());
         GameObjectID = br.ReadString();
         packType = (PackType)br.ReadInt32();
+
+        return this;
     }
-    protected void EndDeserialize()
-    {
-        
-    }
+
+  
+    
 }
