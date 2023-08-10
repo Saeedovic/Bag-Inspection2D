@@ -24,7 +24,7 @@ public class BagMovement : MonoBehaviour
         buttonActions = FindObjectOfType<ButtonActions>();
         networkComponent = GetComponent<NetworkComponent>();
         buttonActions.local = true;
-        
+
 
         if (networkComponent == null)
         {
@@ -50,7 +50,7 @@ public class BagMovement : MonoBehaviour
         transform.position = Pos;
     }
 
-   public void SendBagMovementPacket()
+    public void SendBagMovementPacket()
     {
         if (NetworkManager.instance != null)
         {
@@ -70,27 +70,19 @@ public class BagMovement : MonoBehaviour
             yield return null;
         }
 
-
-
         itemPlacement.PlaceItems();
         print("Movement packet");
 
-       
-        
-            if (buttonActions.local)
-            {
+        if (buttonActions.local)
+        {
 
-                NetworkManager.instance.Send(new BagMovementPacket(
-                        NetworkManager.instance.playerData,
-                        networkComponent.GameObjectID,
-                       transform.position).Serialize());
-            }
+            NetworkManager.instance.Send(new BagMovementPacket(
+                    NetworkManager.instance.playerData,
+                    networkComponent.GameObjectID,
+                   transform.position).Serialize());
+        }
 
         buttonActions.local = true;
-            
-        
-
-
     }
 
     public IEnumerator MoveToLast()
