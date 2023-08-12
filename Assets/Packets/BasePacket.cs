@@ -20,6 +20,7 @@ public class BasePacket
         ItemPlacement,
         BagMovement,
         ButtonActionPacket,
+        Random,
     }
 
     public PackType packType { get; private set; }

@@ -39,7 +39,7 @@ public class ItemPacket : BasePacket
     public new ItemPacket Deserialize(byte[] buffer)
     {
         base.Deserialize(buffer);
-
+        
         int itemCount = br.ReadInt32();
         items = new List<ItemData>();
 

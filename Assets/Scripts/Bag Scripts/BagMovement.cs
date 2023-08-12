@@ -12,6 +12,7 @@ public class BagMovement : MonoBehaviour
     private Vector3 startPos;
     private Vector3 stopPos;
     private Vector3 endPos;
+    public int random;
     public bool ran;
 
     public ButtonActions buttonActions;
@@ -23,6 +24,7 @@ public class BagMovement : MonoBehaviour
     {
         buttonActions = FindObjectOfType<ButtonActions>();
         networkComponent = GetComponent<NetworkComponent>();
+        itemPlacement = FindObjectOfType<ItemPlacement>();
         buttonActions.local = true;
 
 
@@ -70,7 +72,7 @@ public class BagMovement : MonoBehaviour
             yield return null;
         }
 
-        itemPlacement.PlaceItems();
+        itemPlacement.PlaceItems(random);
         print("Movement packet");
 
         if (buttonActions.local)

@@ -11,12 +11,16 @@ public class NetworkManager : MonoBehaviour
     public GameObject bagPrefab;
     public PlayerData playerData;
     public ButtonActions buttonActions;
+    public ItemPlacement itemPlacement;
+    public BagMovement bagMovement;
     public delegate void RecievedBagMovementPacketEvent(string GameObjctID, Vector3 Pos);
     public RecievedBagMovementPacketEvent OnRecievedBagMovementPacket;
 
     void Awake()
     {
         buttonActions = FindObjectOfType<ButtonActions>();
+        bagMovement = FindObjectOfType<BagMovement>();
+        itemPlacement = FindObjectOfType<ItemPlacement>();
 
         Server server = FindObjectOfType<Server>();
         if (server != null)
@@ -103,6 +107,18 @@ public class NetworkManager : MonoBehaviour
                         break;
                     }
                 }
+                itemPlacement.ClearItems();
+            }
+            else if (bp.packType == BasePacket.PackType.Random)
+            {
+                RandomPacket rp = new RandomPacket().Deserialize(buffer);
+              //  bagMovement.random = rp.random;
+                itemPlacement.islocal = false;
+                itemPlacement.PlaceItems(rp.random);
+                Debug.Log("Recieved" + rp.random);
+
+                
+
             }
 
         }
