@@ -170,6 +170,8 @@ MonoBehaviour:
   itemPrefabs:
   - {fileID: 3156050054889354971, guid: 8f22442ecbad2df4482e85db2f47b29d, type: 3}
   - {fileID: 4362156503719626906, guid: 6ae4296f0b332024ba89399618a50a5f, type: 3}
+  - {fileID: 4362156503719626906, guid: 6ae4296f0b332024ba89399618a50a5f, type: 3}
+  - {fileID: 4362156503719626906, guid: 6ae4296f0b332024ba89399618a50a5f, type: 3}
   bag: {fileID: 76759551}
   spawnPositions:
   - {fileID: 1997867344}
@@ -177,6 +179,13 @@ MonoBehaviour:
   - {fileID: 1744256074}
   - {fileID: 2144836295}
   - {fileID: 1301379611}
+  - {fileID: 1994493691}
+  random: 0
+  islocal: 0
+  networkComponent: {fileID: 76759554}
+  index: 0
+  intsss: 
+  cleared: 0
 --- !u!1 &76759551 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8740244889565197749, guid: 0275ec35a4b6e234a8eb92352a76b42a, type: 3}
@@ -191,6 +200,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 15b8eaf09a255e54b8916a0548a29c6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &76759554 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 76759555, guid: 0275ec35a4b6e234a8eb92352a76b42a, type: 3}
+  m_PrefabInstance: {fileID: 3553717361198928258}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76759551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c421bccd269cfb44a624b9b21358e05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &129601968
@@ -751,6 +771,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 412093006}
   m_CullTransparentMesh: 1
+--- !u!114 &475246199 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1001412959125720185, guid: ed89b727a8815b840a013ee295e878de, type: 3}
+  m_PrefabInstance: {fileID: 6063284244983715355}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6063284244983715360}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c421bccd269cfb44a624b9b21358e05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,7 +973,7 @@ GameObject:
   m_Component:
   - component: {fileID: 535587059}
   m_Layer: 0
-  m_Name: Stop Point (1)
+  m_Name: HumanStop Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -994,7 +1025,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   humanMovement: {fileID: 6063284244983715362}
   humanItemPlacement: {fileID: 1736640843}
-  points: 0
+  humanPoints: 0
+  local: 0
 --- !u!4 &563152810
 Transform:
   m_ObjectHideFlags: 0
@@ -1813,7 +1845,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1175420551}
   m_Layer: 0
-  m_Name: Exit point (1)
+  m_Name: HumanExit point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2172,7 +2204,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1595595445}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.38, y: -2.02, z: 0}
+  m_LocalPosition: {x: -11.512, y: -2.02, z: 0}
   m_LocalScale: {x: 1.4967188, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2189,7 +2221,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1599699244}
   m_Layer: 0
-  m_Name: StartingPoint (1)
+  m_Name: HumanStartingPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2250,6 +2282,11 @@ MonoBehaviour:
   - {fileID: 6063284244983715358}
   - {fileID: 6063284244983715357}
   - {fileID: 6063284244983715356}
+  islocal: 0
+  networkComponent: {fileID: 475246199}
+  index: 0
+  ints: 
+  cleared: 0
 --- !u!4 &1736640844
 Transform:
   m_ObjectHideFlags: 0
@@ -2795,6 +2832,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1960059527}
   m_CullTransparentMesh: 1
+--- !u!4 &1994493691 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1994493691, guid: 0275ec35a4b6e234a8eb92352a76b42a, type: 3}
+  m_PrefabInstance: {fileID: 3553717361198928258}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1997867344 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1997867344, guid: 0275ec35a4b6e234a8eb92352a76b42a, type: 3}
@@ -3197,7 +3239,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bagPrefab: {fileID: 76759551}
-  buttonActions: {fileID: 0}
+  buttonActions: {fileID: 1937165580}
+  itemPlacement: {fileID: 36931618}
+  bagMovement: {fileID: 76759552}
+  npcPrefab: {fileID: 6063284244983715360}
+  humanButtonActions: {fileID: 0}
+  humanItemPlacement: {fileID: 0}
+  humanMovement: {fileID: 0}
 --- !u!4 &2133845310
 Transform:
   m_ObjectHideFlags: 0
@@ -3247,11 +3295,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5825814659437242040, guid: 0275ec35a4b6e234a8eb92352a76b42a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.38
+      value: -11.412
       objectReference: {fileID: 0}
     - target: {fileID: 5825814659437242040, guid: 0275ec35a4b6e234a8eb92352a76b42a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.02
+      value: -2.01
       objectReference: {fileID: 0}
     - target: {fileID: 5825814659437242040, guid: 0275ec35a4b6e234a8eb92352a76b42a, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3299,10 +3347,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 5981257848110555953, guid: ed89b727a8815b840a013ee295e878de, type: 3}
-      propertyPath: speed
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5981257848110555953, guid: ed89b727a8815b840a013ee295e878de, type: 3}
       propertyPath: endPosObj
       value: 
       objectReference: {fileID: 1175420551}
@@ -3314,6 +3358,10 @@ PrefabInstance:
       propertyPath: startPosObj
       value: 
       objectReference: {fileID: 1599699244}
+    - target: {fileID: 5981257848110555953, guid: ed89b727a8815b840a013ee295e878de, type: 3}
+      propertyPath: humanButtonActions
+      value: 
+      objectReference: {fileID: 563152809}
     - target: {fileID: 5981257848110555953, guid: ed89b727a8815b840a013ee295e878de, type: 3}
       propertyPath: humanItemPlacement
       value: 

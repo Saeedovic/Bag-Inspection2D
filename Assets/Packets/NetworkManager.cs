@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class NetworkManager : MonoBehaviour
 {
+    ////// These are the Bag variables 
     Socket socket;
     public static NetworkManager instance;
     public GameObject bagPrefab;
@@ -13,14 +14,28 @@ public class NetworkManager : MonoBehaviour
     public ButtonActions buttonActions;
     public ItemPlacement itemPlacement;
     public BagMovement bagMovement;
-    public delegate void RecievedBagMovementPacketEvent(string GameObjctID, Vector3 Pos);
+    public delegate void RecievedBagMovementPacketEvent(Vector3 Pos);
     public RecievedBagMovementPacketEvent OnRecievedBagMovementPacket;
+    
+    /////These are the NPC variables
+    public GameObject npcPrefab;
+    public HumanButtonActions humanButtonActions;
+    public HumanItemPlacement humanItemPlacement;
+    public HumanMovement humanMovement;
+    public delegate void RecievedHumanMovementPacketEvent(Vector3 Pos);
+    public RecievedHumanMovementPacketEvent OnRecievedHumanMovementPacketEvent;
+
+
 
     void Awake()
     {
         buttonActions = FindObjectOfType<ButtonActions>();
         bagMovement = FindObjectOfType<BagMovement>();
         itemPlacement = FindObjectOfType<ItemPlacement>();
+
+        humanButtonActions = FindObjectOfType<HumanButtonActions>();
+        humanItemPlacement = FindObjectOfType<HumanItemPlacement>();
+        humanMovement = FindObjectOfType<HumanMovement>();
 
         Server server = FindObjectOfType<Server>();
         if (server != null)
@@ -30,6 +45,7 @@ public class NetworkManager : MonoBehaviour
                 if (server.clients.Count == 2)
                 {
                     SpawnBag();
+                    SpawnNpc();
                 }
             };
         }
@@ -66,36 +82,32 @@ public class NetworkManager : MonoBehaviour
 
     public void SpawnBag()
     {
-       
+
         GameObject bagObject = Instantiate(bagPrefab);
         BagMovement bagMovement = bagObject.GetComponent<BagMovement>();
         StartCoroutine(bagMovement.MoveToEnd());
         bagMovement.SendBagMovementPacket();
     }
+
+    public void SpawnNpc()
+    {
+        GameObject npc = Instantiate(npcPrefab);
+        HumanMovement npcMovement = npc.GetComponent<HumanMovement>();
+        StartCoroutine(npcMovement.MoveToStop());
+        npcMovement.SendHumanMovementPacket();
+
+    }
     void Update()
     {
+        // checking if theres any data to be received from the socket 
         if (socket.Available > 0)
         {
             byte[] buffer = new byte[256];
             socket.Receive(buffer);
             BasePacket bp = new BasePacket().Deserialize(buffer);
 
-            print("Recieved packet" + bp.packType);
-            if (bp.packType == BasePacket.PackType.ItemPlacement)
-            {
-                ItemPacket ip = new ItemPacket().Deserialize(buffer);
 
-                Debug.Log(ip.items.Count);
-                /*    ItemPlacement itemPlacement = GetComponent<ItemPlacement>();
-                    if (itemPlacement != null)
-                    {
-                        foreach (var item in ip.items)
-                        {
-                            itemPlacement.PlaceItem(item.position, item.rotation);
-                        }
-                    }*/
-            }
-            else if (bp.packType == BasePacket.PackType.BagMovement)
+            if (bp.packType == BasePacket.PackType.BagMovement)
             {
                 BagMovementPacket bmp = new BagMovementPacket().Deserialize(buffer);
 
@@ -112,22 +124,46 @@ public class NetworkManager : MonoBehaviour
             else if (bp.packType == BasePacket.PackType.Random)
             {
                 RandomPacket rp = new RandomPacket().Deserialize(buffer);
-              //  bagMovement.random = rp.random;
+                //  bagMovement.random = rp.random;
                 itemPlacement.islocal = false;
                 itemPlacement.PlaceItems(rp.random);
                 Debug.Log("Recieved" + rp.random);
 
-                
+
 
             }
+            else if (bp.packType == BasePacket.PackType.NpcRandom)
+            {
+                NpcRandomPacket nrp = new NpcRandomPacket().Deserialize(buffer);
+                humanItemPlacement.islocal = false;
+                humanItemPlacement.PlaceItems(nrp.random);
+                Debug.Log("Recieved" + nrp.random);
 
+
+
+            }
+            else if (bp.packType == BasePacket.PackType.HumanMovement)
+            {
+                HumanMovementPacket hmp = new HumanMovementPacket().Deserialize(buffer);
+
+                foreach (NetworkComponent nc in FindObjectsOfType<NetworkComponent>())
+                {
+                    if (nc.GameObjectID == hmp.GameObjectID)
+                    {
+                        nc.transform.position = hmp.Pos;
+                        break;
+                    }
+                }
+                humanItemPlacement.ClearItems();
+
+            }
         }
     }
 
-        public void Send(byte[] buffer)
-        {
-            socket.Send(buffer);
-        }
-
+    public void Send(byte[] buffer)
+    {
+        socket.Send(buffer);
     }
+
+}
 

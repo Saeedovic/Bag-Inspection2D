@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static NetworkManager;
 
 public class HumanMovement : MonoBehaviour
 {
@@ -11,28 +12,50 @@ public class HumanMovement : MonoBehaviour
     private Vector3 startPos;
     private Vector3 stopPos;
     private Vector3 endPos;
+    public int random;
+    public bool ran;
 
+    public HumanButtonActions humanButtonActions;
     public HumanItemPlacement humanItemPlacement;
 
-    private void Start()
+    NetworkComponent networkComponent;
+
+    public void Start()
     {
+        humanButtonActions = FindObjectOfType<HumanButtonActions>();
+        networkComponent = GetComponent<NetworkComponent>();
+        humanItemPlacement = FindObjectOfType<HumanItemPlacement>();
+        humanButtonActions.local = true;
+
+
+        if (networkComponent == null)
+        {
+            return;
+        }
+
+        NetworkManager.instance.OnRecievedHumanMovementPacketEvent += RecievedHumanMovementPacketEvent;
+
         startPos = startPosObj.position;
         stopPos = stopPosObj.position;
         endPos = endPosObj.position;
         StartCoroutine(MoveToStop());
+
     }
 
-    public IEnumerator MoveToStart()
+    void RecievedHumanMovementPacketEvent(Vector3 Pos)
     {
-        while (Vector3.Distance(transform.position, startPos) > 0.001f)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, startPos, speed * Time.deltaTime);
-            yield return null;
-        }
+        transform.position = Pos;
+    }
 
-        ResetToStart();
-        humanItemPlacement.ClearItems();
-        StartCoroutine(MoveToStop());
+    public void SendHumanMovementPacket()
+    {
+        if (NetworkManager.instance != null)
+        {
+            NetworkManager.instance.Send(new BagMovementPacket(
+                NetworkManager.instance.playerData,
+                networkComponent.GameObjectID,
+                transform.position).Serialize());
+        }
     }
 
     public IEnumerator MoveToStop()
@@ -40,10 +63,12 @@ public class HumanMovement : MonoBehaviour
         while (Vector3.Distance(transform.position, stopPos) > 0.001f)
         {
             transform.position = Vector3.MoveTowards(transform.position, stopPos, speed * Time.deltaTime);
+            SendHumanMovementPacket();
             yield return null;
         }
 
-        humanItemPlacement.PlaceItems();
+        humanItemPlacement.PlaceItems(random);
+      
     }
 
     public IEnumerator MoveToLast()
@@ -51,12 +76,14 @@ public class HumanMovement : MonoBehaviour
         while (Vector3.Distance(transform.position, endPos) > 0.001f)
         {
             transform.position = Vector3.MoveTowards(transform.position, endPos, speed * Time.deltaTime);
+            SendHumanMovementPacket();
             yield return null;
         }
 
         ResetToStart();
         humanItemPlacement.ClearItems();
         StartCoroutine(MoveToStop());
+
     }
 
     public void ResetToStart()

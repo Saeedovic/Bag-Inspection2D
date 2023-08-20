@@ -47,7 +47,7 @@ public class BagMovement : MonoBehaviour
                 transform.position).Serialize());*/
     }
 
-    void RecievedBagMovementPacketEvent(string GameObjectID, Vector3 Pos)
+    void RecievedBagMovementPacketEvent(Vector3 Pos)
     {
         transform.position = Pos;
     }
@@ -75,7 +75,7 @@ public class BagMovement : MonoBehaviour
         itemPlacement.PlaceItems(random);
         print("Movement packet");
 
-        if (buttonActions.local)
+        /*if (buttonActions.local)
         {
 
             NetworkManager.instance.Send(new BagMovementPacket(
@@ -84,7 +84,7 @@ public class BagMovement : MonoBehaviour
                    transform.position).Serialize());
         }
 
-        buttonActions.local = true;
+        buttonActions.local = true;*/
     }
 
     public IEnumerator MoveToLast()
@@ -100,10 +100,10 @@ public class BagMovement : MonoBehaviour
         itemPlacement.ClearItems();
         StartCoroutine(MoveToEnd());
 
-        NetworkManager.instance.Send(new BagMovementPacket(
+        /*NetworkManager.instance.Send(new BagMovementPacket(
                NetworkManager.instance.playerData,
                networkComponent.GameObjectID,
-              transform.position).Serialize());
+              transform.position).Serialize());*/
     }
 
     public void ResetToStart()

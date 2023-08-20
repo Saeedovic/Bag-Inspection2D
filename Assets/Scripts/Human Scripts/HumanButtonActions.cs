@@ -1,42 +1,45 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HumanButtonActions : MonoBehaviour
 {
-    public HumanMovement humanMovement; 
-    public HumanItemPlacement humanItemPlacement; 
-    public int points = 0;
-
+    public HumanMovement humanMovement;
+    public HumanItemPlacement humanItemPlacement;
+    public int humanPoints = 0;
+    public bool local;
     public void OnGreenButtonClicked()
     {
         if (humanItemPlacement.HasIllegalItems())
         {
-            points -= 10;
-            StartCoroutine(humanMovement.MoveToLast());
+            humanPoints -= 10;
+            ResetBag();
         }
         else
         {
-            points += 10;
+            humanPoints += 10;
             StartCoroutine(humanMovement.MoveToLast());
         }
+
     }
 
     public void OnRedButtonClicked()
     {
         if (humanItemPlacement.HasIllegalItems())
         {
-            points += 10;    
+            humanPoints += 10;
         }
         else
         {
-            points -= 10;         
+            humanPoints -= 10;
         }
+        ResetBag();
 
-        StartCoroutine(humanMovement.MoveToStart());
     }
 
-    private void ResetHuman()
+    private void ResetBag()
     {
         humanMovement.ResetToStart();
         humanItemPlacement.ClearItems();

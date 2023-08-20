@@ -17,10 +17,11 @@ public class BasePacket
     public enum PackType
     {
         None,
-        ItemPlacement,
         BagMovement,
+        HumanMovement,
         ButtonActionPacket,
         Random,
+        NpcRandom,
     }
 
     public PackType packType { get; private set; }

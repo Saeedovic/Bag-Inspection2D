@@ -29,7 +29,7 @@ public class ItemPlacement : MonoBehaviour
             NetworkManager.instance.Send(new RandomPacket(NetworkManager.instance.playerData,
                       networkComponent.GameObjectID,
                      intsss[i]).Serialize());
-            Debug.Log("SENT" + random);
+            Debug.Log("SENTTTTT" + random);
             yield return new WaitForSeconds(0.25f);
         }
         intsss.Clear();
