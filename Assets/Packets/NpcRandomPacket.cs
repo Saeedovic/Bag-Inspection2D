@@ -27,8 +27,6 @@ public class NpcRandomPacket : BasePacket
     public new NpcRandomPacket Deserialize(byte[] buffer)
     {
         base.Deserialize(buffer);
-
-
         random = br.ReadInt32();
 
 

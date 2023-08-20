@@ -10,6 +10,12 @@ public class ButtonActions : MonoBehaviour
     public ItemPlacement itemPlacement;
     public int points = 0;
     public bool local;
+    public NetworkComponent networkComponent;
+
+    public void Start()
+    {
+        networkComponent = FindObjectOfType<NetworkComponent>();
+    }
     public void OnGreenButtonClicked()
     {
         if (itemPlacement.HasIllegalItems())
@@ -23,7 +29,10 @@ public class ButtonActions : MonoBehaviour
             StartCoroutine(bagMovement.MoveToLast());
         }
 
- }
+        NetworkManager.instance.Send(new PointsPacket(NetworkManager.instance.playerData,
+                      networkComponent.GameObjectID,
+                     points).Serialize());
+    }
 
     public void OnRedButtonClicked()
     {
@@ -35,8 +44,12 @@ public class ButtonActions : MonoBehaviour
         {
             points -= 10;
         }
-            ResetBag();
-        
+        ResetBag();
+
+        NetworkManager.instance.Send(new PointsPacket(NetworkManager.instance.playerData,
+                      networkComponent.GameObjectID,
+                     points).Serialize());
+
     }
 
     private void ResetBag()

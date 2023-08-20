@@ -157,6 +157,11 @@ public class NetworkManager : MonoBehaviour
                 humanItemPlacement.ClearItems();
 
             }
+            else if(bp.packType == BasePacket.PackType.Points)
+            {
+                PointsPacket pp = new PointsPacket().Deserialize(buffer);
+                buttonActions.points = pp.points;
+            }
         }
     }
 

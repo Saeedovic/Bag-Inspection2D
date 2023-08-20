@@ -19,7 +19,7 @@ public class BasePacket
         None,
         BagMovement,
         HumanMovement,
-        ButtonActionPacket,
+        Points,
         Random,
         NpcRandom,
     }
