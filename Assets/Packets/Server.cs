@@ -4,10 +4,12 @@ using System.Net;
 using UnityEngine;
 using System.Collections.Generic;
 
+
 public class Server : MonoBehaviour
 {
     Socket serverSocket;
-    List<Socket> clients;
+    public List<Socket> clients;
+    public event Action OnClientConnected;
 
     void Start()
     {
@@ -20,8 +22,9 @@ public class Server : MonoBehaviour
         serverSocket.Listen(10);
         serverSocket.Blocking = false;
 
-        print("Waiting for client to connect...");
+        print("Waiting for clients to connect...");
         clients = new List<Socket>();
+        InvokeRepeating("IsAlive", 1, 1);
     }
 
     void Update()
@@ -29,22 +32,36 @@ public class Server : MonoBehaviour
         try
         {
             clients.Add(serverSocket.Accept());
-            
+            OnClientConnected?.Invoke();
+
             Debug.LogError("Client Connected");
+
+            if (clients.Count >= 2)
+            {
+                Debug.LogError("2 Clients Connected");
+
+            }
         }
-        catch
+        catch (SocketException e)
         {
-            //Console.WriteLine("No client connected");
+            if (e.SocketErrorCode == SocketError.WouldBlock)
+            {
+                Debug.Log(e);
+            }
         }
 
-        try
+        for (int i = 0; i < clients.Count; i++)
         {
-            for (int i = 0; i < clients.Count; i++)
+
+            try
             {
+
                 if (clients[i].Available > 0)
                 {
                     byte[] buffer = new byte[clients[i].Available];
                     clients[i].Receive(buffer);
+
+                    print("Recieved packet");
 
                     for (int j = 0; j < clients.Count; j++)
                     {
@@ -52,13 +69,51 @@ public class Server : MonoBehaviour
                             continue;
 
                         clients[j].Send(buffer);
+                        print("Sent packet");
+
                     }
                 }
+
+            }
+            catch (SocketException e)
+            {
+
+                if (e.SocketErrorCode == SocketError.WouldBlock)
+                {
+                     Debug.Log(e);
+                    
+                }
+
             }
         }
-        catch
+    }
+
+    void IsAlive()
+    {
+        print("is alibe");
+        for (int i = 0; i < clients.Count; i++)
         {
-            //Console.WriteLine("No client connected");
+            try
+            {
+                clients[i].Send(new byte[1]);
+            }
+            catch (SocketException e)
+            {
+                if (e.SocketErrorCode != SocketError.WouldBlock)
+                {
+                    if (e.SocketErrorCode == SocketError.ConnectionAborted || e.SocketErrorCode == SocketError.ConnectionReset)
+                    {
+                        Debug.Log("Disconnected");
+                        clients[i].Close();
+                        clients.RemoveAt(i);
+                    }
+                    else
+                    {
+                        Debug.Log(e);
+                    }
+                }
+
+            }
         }
     }
 }
