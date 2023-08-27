@@ -32,6 +32,7 @@ public class ButtonActions : MonoBehaviour
         NetworkManager.instance.Send(new PointsPacket(NetworkManager.instance.playerData,
                       networkComponent.GameObjectID,
                      points).Serialize());
+        print("sent points packet");
     }
 
     public void OnRedButtonClicked()
@@ -49,6 +50,8 @@ public class ButtonActions : MonoBehaviour
         NetworkManager.instance.Send(new PointsPacket(NetworkManager.instance.playerData,
                       networkComponent.GameObjectID,
                      points).Serialize());
+        print("sent points packet");
+
 
     }
 

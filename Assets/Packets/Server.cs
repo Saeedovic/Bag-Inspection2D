@@ -10,9 +10,11 @@ public class Server : MonoBehaviour
     Socket serverSocket;
     public List<Socket> clients;
     public event Action OnClientConnected;
+    NetworkComponent NetworkComponent;
 
     void Start()
     {
+        
         serverSocket = new Socket(
             AddressFamily.InterNetwork,
             SocketType.Stream,
@@ -39,6 +41,9 @@ public class Server : MonoBehaviour
             if (clients.Count >= 2)
             {
                 Debug.LogError("2 Clients Connected");
+
+            
+          
 
             }
         }

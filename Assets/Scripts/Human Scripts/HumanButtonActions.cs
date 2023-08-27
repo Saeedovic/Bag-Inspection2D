@@ -15,7 +15,7 @@ public class HumanButtonActions : MonoBehaviour
         if (humanItemPlacement.HasIllegalItems())
         {
             humanPoints -= 10;
-            ResetBag();
+            ResetHuman();
         }
         else
         {
@@ -35,11 +35,11 @@ public class HumanButtonActions : MonoBehaviour
         {
             humanPoints -= 10;
         }
-        ResetBag();
+        ResetHuman();
 
     }
 
-    private void ResetBag()
+    private void ResetHuman()
     {
         humanMovement.ResetToStart();
         humanItemPlacement.ClearItems();

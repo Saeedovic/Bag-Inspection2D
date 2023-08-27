@@ -21,6 +21,7 @@ public class BasePacket
         HumanMovement,
         Points,
         Random,
+        SetIds,
         NpcRandom,
     }
 

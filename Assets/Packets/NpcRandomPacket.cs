@@ -12,7 +12,7 @@ public class NpcRandomPacket : BasePacket
     }
 
     public NpcRandomPacket(PlayerData player, string GameObjectID, int random)
-        : base(player, GameObjectID, PackType.Random)
+        : base(player, GameObjectID, PackType.NpcRandom)
     {
         this.random = random;
     }

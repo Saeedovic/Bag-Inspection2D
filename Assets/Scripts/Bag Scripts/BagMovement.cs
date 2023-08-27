@@ -27,6 +27,11 @@ public class BagMovement : MonoBehaviour
         itemPlacement = FindObjectOfType<ItemPlacement>();
         buttonActions.local = true;
 
+        //networkComponent.GenerateGameObjectIDToSelf();
+        networkComponent.GameObjectID = "5";
+        networkComponent.OwnerID = "6";
+
+
 
         if (networkComponent == null)
         {

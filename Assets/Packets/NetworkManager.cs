@@ -37,18 +37,19 @@ public class NetworkManager : MonoBehaviour
         humanItemPlacement = FindObjectOfType<HumanItemPlacement>();
         humanMovement = FindObjectOfType<HumanMovement>();
 
-        Server server = FindObjectOfType<Server>();
+      /*  Server server = FindObjectOfType<Server>();
         if (server != null)
         {
             server.OnClientConnected += () =>
             {
-                if (server.clients.Count == 2)
+                if (server.clients.Count > 1)
                 {
                     SpawnBag();
                     SpawnNpc();
+                    print("ISSS WORKINGGG");
                 }
             };
-        }
+        }*/
 
         if (instance == null)
         {
@@ -150,6 +151,7 @@ public class NetworkManager : MonoBehaviour
                 {
                     if (nc.GameObjectID == hmp.GameObjectID)
                     {
+                        print("GAMEOBJECT"+ hmp.GameObjectID);
                         nc.transform.position = hmp.Pos;
                         break;
                     }
@@ -161,7 +163,10 @@ public class NetworkManager : MonoBehaviour
             {
                 PointsPacket pp = new PointsPacket().Deserialize(buffer);
                 buttonActions.points = pp.points;
+                humanButtonActions.humanPoints = pp.points;
+                Debug.Log("Recived" + pp.points);
             }
+           
         }
     }
 

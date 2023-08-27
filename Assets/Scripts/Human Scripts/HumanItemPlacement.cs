@@ -16,8 +16,9 @@ public class HumanItemPlacement : MonoBehaviour
 
     public void Start()
     {
-        networkComponent = FindObjectOfType<NetworkComponent>();
+       // networkComponent = FindObjectOfType<NetworkComponent>();
         islocal = true;
+        
     }
 
     public IEnumerator SendPackets()

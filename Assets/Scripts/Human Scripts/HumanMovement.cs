@@ -27,6 +27,10 @@ public class HumanMovement : MonoBehaviour
         humanItemPlacement = FindObjectOfType<HumanItemPlacement>();
         humanButtonActions.local = true;
 
+        //networkComponent.GenerateGameObjectIDToSelf();
+        networkComponent.GameObjectID = "1";
+        networkComponent.OwnerID = "2";
+
 
         if (networkComponent == null)
         {
@@ -51,10 +55,12 @@ public class HumanMovement : MonoBehaviour
     {
         if (NetworkManager.instance != null)
         {
-            NetworkManager.instance.Send(new BagMovementPacket(
+            NetworkManager.instance.Send(new HumanMovementPacket(
                 NetworkManager.instance.playerData,
                 networkComponent.GameObjectID,
                 transform.position).Serialize());
+
+            print(networkComponent.GameObjectID);
         }
     }
 
